@@ -7,7 +7,7 @@ Constraint-optimization engine (OR-Tools CP-SAT) that jointly schedules railway 
 [![React 19](https://img.shields.io/badge/React-19.0-61DAFB.svg?logo=react&logoColor=black)](https://react.dev/)
 [![Google OR-Tools](https://img.shields.io/badge/Solver-OR--Tools%20CP--SAT-4285F4.svg?logo=google&logoColor=white)](https://developers.google.com/optimization)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Tests: 17 Passed](https://img.shields.io/badge/Tests-17%20Passed-success.svg)](tests/)
+[![CI](https://github.com/srivarsan007/blocksync/actions/workflows/ci.yml/badge.svg)](https://github.com/srivarsan007/blocksync/actions/workflows/ci.yml)
 
 ---
 
@@ -46,7 +46,7 @@ source venv/bin/activate
 # Install runtime and testing dependencies
 pip install -r requirements-dev.txt
 
-# Run test suite (17 automated unit and integration tests)
+# Run test suite (21 automated unit, integration, and security tests)
 PYTHONPATH=. venv/bin/pytest tests/ -v
 
 # Start FastAPI backend server (http://127.0.0.1:8000)
@@ -69,7 +69,14 @@ npm run dev
 
 BlockSync includes seeded accounts for local evaluation across coordinator and department roles.
 
-> **Note**: These credentials are demo-grade credentials intended strictly for local portfolio testing and evaluation. In production environments, authentication interfaces with institutional Single Sign-On (SSO) systems.
+> [!CAUTION]
+> **Security Warning**: Demo mode defaults to **off** (`BLOCKSYNC_DEMO_MODE=false`). **Never enable demo mode in a public or production deployment.** Only enable demo mode locally for offline evaluation. When demo mode is disabled, BlockSync strictly refuses to start unless `PYJWT_SECRET` is explicitly configured.
+
+To enable seeded evaluation accounts for local testing, set `BLOCKSYNC_DEMO_MODE=true` and provide a `PYJWT_SECRET` in your local environment or `.env` file:
+```bash
+export BLOCKSYNC_DEMO_MODE=true
+export PYJWT_SECRET=local-dev-evaluation-secret
+```
 
 | Role | Username | Password | Access Level |
 |---|---|---|---|
@@ -78,7 +85,7 @@ BlockSync includes seeded accounts for local evaluation across coordinator and d
 | **Signal & Telecom** | `snt_desk` | `snt123` | Interlocking & Points Request Submission Desk |
 | **Traction Distribution** | `trd_desk` | `trd123` | 25kV OHE Power Isolation Submission Desk |
 
-The demo accounts and password hints are controlled by the `BLOCKSYNC_DEMO_MODE` environment flag (defaults to `true`).
+When `BLOCKSYNC_DEMO_MODE=true`, `GET /auth/accounts` returns convenient login hints in the local dashboard. When demo mode is off (`false`), no seeded accounts are created and `/auth/accounts` returns an empty array.
 
 ---
 
@@ -137,8 +144,8 @@ BlockSync can be customized using environment variables:
 
 | Variable | Description | Default |
 |---|---|---|
-| `PYJWT_SECRET` | Secret key used to sign and verify session JWTs. | Built-in fallback string (logs warning at startup) |
-| `BLOCKSYNC_DEMO_MODE` | Enables seeded accounts and `GET /auth/accounts` password hints. | `true` |
+| `PYJWT_SECRET` | Secret key used to sign and verify session JWTs. **Required when demo mode is off.** | None (startup is refused if unset and demo mode is off) |
+| `BLOCKSYNC_DEMO_MODE` | Enables seeded accounts and `GET /auth/accounts` password hints. | `false` |
 | `VITE_API_BASE_URL` | Base API URL read by the React dashboard. | `http://127.0.0.1:8000` |
 
 ---

@@ -9,14 +9,29 @@ from typing import Dict, List
 import jwt
 from fastapi import APIRouter, HTTPException, Header, status
 
-from backend.db import authenticate_user, get_user_by_username
+from backend.db import authenticate_user, get_user_by_username, is_demo_mode
 from backend.models import LoginRequest, LoginResponse, UserSession
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-# JWT configuration: read from environment with safe local-development fallback
-JWT_SECRET = os.getenv("PYJWT_SECRET", os.getenv("JWT_SECRET", "blocksync-local-dev-jwt-secret-key-evaluation-only"))
 JWT_ALGORITHM = "HS256"
+
+
+def get_jwt_secret() -> str:
+    """
+    Retrieves the JWT signing secret from the environment.
+    If demo mode is enabled and no secret is set, uses an ephemeral development secret.
+    If demo mode is disabled and no secret is set, raises an HTTPException.
+    """
+    secret = os.getenv("PYJWT_SECRET") or os.getenv("JWT_SECRET")
+    if secret:
+        return secret
+    if is_demo_mode():
+        return "blocksync-demo-mode-ephemeral-key"
+    raise HTTPException(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        detail="PYJWT_SECRET environment variable is not configured."
+    )
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -40,7 +55,7 @@ def login(payload: LoginRequest):
         "timestamp": timestamp,
         "exp": timestamp + (24 * 3600)  # 24-hour expiration window
     }
-    token = jwt.encode(jwt_payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    token = jwt.encode(jwt_payload, get_jwt_secret(), algorithm=JWT_ALGORITHM)
 
     return LoginResponse(
         token=token,
@@ -55,10 +70,9 @@ def login(payload: LoginRequest):
 def list_available_accounts() -> List[Dict[str, str]]:
     """
     Returns list of seeded railway desks for dispatcher convenience.
-    Only available when BLOCKSYNC_DEMO_MODE=true.
+    Only available when BLOCKSYNC_DEMO_MODE=true is explicitly set.
     """
-    demo_mode_raw = os.getenv("BLOCKSYNC_DEMO_MODE", "true").strip().lower()
-    if demo_mode_raw in ("0", "false", "no", "off"):
+    if not is_demo_mode():
         return []
 
     return [
@@ -109,7 +123,7 @@ def get_current_user(authorization: str = Header(None)):
         token = token[7:].strip()
 
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        payload = jwt.decode(token, get_jwt_secret(), algorithms=[JWT_ALGORITHM])
         username = payload.get("username")
         if not username:
             raise HTTPException(
@@ -143,4 +157,3 @@ def get_current_user(authorization: str = Header(None)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Malformed session token."
         )
-

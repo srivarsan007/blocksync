@@ -21,11 +21,13 @@ from backend.models import (
     TaskStatus,
 )
 
-DB_PATH = Path("data/blocksync.db")
+DB_PATH = Path(os.getenv("BLOCKSYNC_DB_PATH", "data/blocksync.db"))
 
-# Demo Mode Flag: controls whether seeded evaluation accounts are populated
-DEMO_MODE_RAW = os.getenv("BLOCKSYNC_DEMO_MODE", "true").strip().lower()
-DEMO_MODE = DEMO_MODE_RAW not in ("0", "false", "no", "off")
+
+def is_demo_mode() -> bool:
+    """Returns True only when BLOCKSYNC_DEMO_MODE is explicitly set to true/1/yes/on."""
+    val = os.getenv("BLOCKSYNC_DEMO_MODE", "false").strip().lower()
+    return val in ("1", "true", "yes", "on")
 
 # Fixed Seeded Accounts (enabled when BLOCKSYNC_DEMO_MODE=true)
 SEEDED_ACCOUNTS = [
@@ -146,7 +148,7 @@ def init_db():
     conn.commit()
 
     # Seed the 4 fixed accounts if not present (only when BLOCKSYNC_DEMO_MODE=true)
-    if DEMO_MODE:
+    if is_demo_mode():
         for acc in SEEDED_ACCOUNTS:
             cursor.execute("SELECT id FROM users WHERE username = ?", (acc["username"],))
             if not cursor.fetchone():

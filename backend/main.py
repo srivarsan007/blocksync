@@ -12,7 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 logger = logging.getLogger("blocksync")
 
 from backend.db import init_db
-from backend.routes.auth import JWT_SECRET, router as auth_router
+import sys
+from backend.db import is_demo_mode
+from backend.routes.auth import router as auth_router
 from backend.routes.tasks import router as tasks_router
 from backend.routes.graph import router as graph_router
 from backend.routes.schedule import router as schedule_router
@@ -22,12 +24,28 @@ from backend.routes.about import router as about_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Log warning if using insecure development fallback JWT secret
-    if not os.getenv("PYJWT_SECRET") and not os.getenv("JWT_SECRET"):
-        logger.warning(
-            "SECURITY WARNING: Running with default insecure fallback JWT secret. "
-            "Set PYJWT_SECRET environment variable for production deployments."
+    demo_mode = is_demo_mode()
+    secret = os.getenv("PYJWT_SECRET") or os.getenv("JWT_SECRET")
+
+    # When demo mode is off, refuse to start unless PYJWT_SECRET is set
+    if not demo_mode and not secret:
+        err_msg = (
+            "CRITICAL STARTUP ERROR: PYJWT_SECRET environment variable is not configured.\n"
+            "When demo mode is disabled (BLOCKSYNC_DEMO_MODE=false), BlockSync requires "
+            "a secure JWT signing secret to operate.\n"
+            "Set PYJWT_SECRET in your environment or .env file before starting the server."
         )
+        sys.stderr.write(f"\n{"="*75}\n{err_msg}\n{"="*75}\n\n")
+        raise RuntimeError(
+            "PYJWT_SECRET environment variable must be set when demo mode is disabled."
+        )
+
+    if demo_mode and not secret:
+        logger.warning(
+            "DEMO MODE WARNING: Running in demo mode without PYJWT_SECRET. "
+            "Seeded accounts and demo endpoints are enabled. Do not deploy to production with demo mode active."
+        )
+
     # Initialize SQLite database with tasks and maintenance windows
     init_db()
     yield
