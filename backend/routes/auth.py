@@ -5,7 +5,7 @@ Provides login verification and signed JWT session identity for Coordinator and 
 
 import os
 import time
-from typing import Dict, List
+from typing import Dict, List, Optional
 import jwt
 from fastapi import APIRouter, HTTPException, Header, status
 
@@ -17,17 +17,28 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 JWT_ALGORITHM = "HS256"
 
 
+import secrets
+
+# Ephemeral secret generated randomly per process if demo mode is enabled without an explicit PYJWT_SECRET.
+# Never hardcoded or constant across restarts.
+_EPHEMERAL_DEMO_SECRET: Optional[str] = None
+
+
 def get_jwt_secret() -> str:
     """
     Retrieves the JWT signing secret from the environment.
-    If demo mode is enabled and no secret is set, uses an ephemeral development secret.
+    If demo mode is enabled and no secret is set, uses a random secret generated
+    per process (using secrets.token_urlsafe).
     If demo mode is disabled and no secret is set, raises an HTTPException.
     """
+    global _EPHEMERAL_DEMO_SECRET
     secret = os.getenv("PYJWT_SECRET") or os.getenv("JWT_SECRET")
     if secret:
         return secret
     if is_demo_mode():
-        return "blocksync-demo-mode-ephemeral-key"
+        if _EPHEMERAL_DEMO_SECRET is None:
+            _EPHEMERAL_DEMO_SECRET = secrets.token_urlsafe(32)
+        return _EPHEMERAL_DEMO_SECRET
     raise HTTPException(
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         detail="PYJWT_SECRET environment variable is not configured."
