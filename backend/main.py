@@ -35,7 +35,8 @@ async def lifespan(app: FastAPI):
             "a secure JWT signing secret to operate.\n"
             "Set PYJWT_SECRET in your environment or .env file before starting the server."
         )
-        sys.stderr.write(f"\n{"="*75}\n{err_msg}\n{"="*75}\n\n")
+        border = "=" * 75
+        sys.stderr.write(f"\n{border}\n{err_msg}\n{border}\n\n")
         raise RuntimeError(
             "PYJWT_SECRET environment variable must be set when demo mode is disabled."
         )
