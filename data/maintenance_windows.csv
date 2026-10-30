@@ -1,0 +1,4 @@
+id,section_id,start_minute,end_minute,available_duration_minutes
+W-A-morning,A,360,600,240
+W-B-morning,B,480,720,240
+W-C-morning,C,600,840,240

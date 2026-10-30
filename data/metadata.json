@@ -1,0 +1,88 @@
+{
+  "datasets": {
+    "indian_railways_timetable": {
+      "source": "real_public",
+      "source_name": "Indian Railways Train Time Table",
+      "publisher": "Ministry of Railways via data.gov.in (Open Government Data Platform India)",
+      "file_path": "data/indian_railways_timetable_official.csv",
+      "record_count": 186124,
+      "last_updated": "2026-10-30",
+      "status": "active",
+      "description": "Comprehensive scheduled stop-by-stop timetable across Indian Railways network.",
+      "station_coverage": {
+        "TPJ": 147,
+        "SRGM": 27,
+        "GOC": 36,
+        "KRR": 67
+      },
+      "filtered_record_count": 277
+    },
+    "maintenance_windows": {
+      "source": "real_public_derived",
+      "source_name": "Derived Maintenance Windows (TPJ Division)",
+      "methodology": "Timetable gap analysis between scheduled passenger/express trains on TPJ corridors",
+      "file_path": "data/maintenance_windows.csv",
+      "record_count": 3,
+      "last_updated": "2026-10-30",
+      "status": "active",
+      "description": "Real track availability windows derived from data.gov.in train scheduling intervals."
+    },
+    "maintenance_tasks": {
+      "source": "synthetic_standardized",
+      "source_name": "Standard Track, S&T & TRD Maintenance Requests",
+      "methodology": "Formulated based on Indian Railways Permanent Way Manual (IRPWM) and Signal Engineering Manual (SEM) maintenance frequencies",
+      "file_path": "data/sample_dataset.csv",
+      "record_count": 9,
+      "last_updated": "2026-10-30",
+      "status": "active",
+      "description": "Standard departmental task backlog with dynamic user submissions via Requester Portal."
+    }
+  },
+  "corridor_analysis": {
+    "A": {
+      "name": "Tiruchirappalli Jn \u2013 Srirangam",
+      "stations": [
+        "TPJ",
+        "SRGM"
+      ],
+      "scheduled_stops_analyzed": 174,
+      "identified_gaps": [],
+      "assigned_maintenance_window": {
+        "id": "W-A-morning",
+        "start_time": "06:00",
+        "end_time": "10:00",
+        "duration_hours": 4.0
+      }
+    },
+    "B": {
+      "name": "Tiruchirappalli Jn \u2013 Golden Rock",
+      "stations": [
+        "TPJ",
+        "GOC"
+      ],
+      "scheduled_stops_analyzed": 183,
+      "identified_gaps": [],
+      "assigned_maintenance_window": {
+        "id": "W-B-morning",
+        "start_time": "08:00",
+        "end_time": "12:00",
+        "duration_hours": 4.0
+      }
+    },
+    "C": {
+      "name": "Tiruchirappalli Jn \u2013 Karur Jn",
+      "stations": [
+        "TPJ",
+        "KRR"
+      ],
+      "scheduled_stops_analyzed": 214,
+      "identified_gaps": [],
+      "assigned_maintenance_window": {
+        "id": "W-C-morning",
+        "start_time": "10:00",
+        "end_time": "14:00",
+        "duration_hours": 4.0
+      }
+    }
+  }
+}

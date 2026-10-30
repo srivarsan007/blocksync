@@ -1,0 +1,6 @@
+# BlockSync Development & Testing Dependencies
+-r requirements.txt
+
+# Testing & Test Client
+pytest>=7.0
+httpx>=0.24

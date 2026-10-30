@@ -1,0 +1,11 @@
+id,department,section_id,duration_minutes,criticality,due_date,status,description
+E1,Engineering,A,45,5,2026-09-01,pending,Rail joint welding & USFD flaw detection (TPJ-SRGM)
+S1,S&T,A,30,5,2026-09-01,pending,Point machine & track circuit calibration (SRGM Yard)
+T1,TRD,A,40,5,2026-09-01,pending,25kV OHE cantilever replacement & power isolation
+E2,Engineering,A,60,4,2026-08-25,pending,Deep screening & sleeper renewal (KM 338/10-14)
+S2,S&T,B,25,3,2026-09-02,pending,Axle counter sensor replacement & signal alignment (GOC)
+E3,Engineering,B,50,3,2026-09-02,pending,Ballast tamping & track alignment adjustment
+T2,TRD,B,35,2,2026-09-03,pending,OHE contact wire tensioning & isolator check
+E4,Engineering,C,40,2,2026-09-04,pending,Switch expansion joint (SEJ) lubrication & bolt tightening
+S3,S&T,C,20,1,2026-09-04,pending,Block instrument routine inspection & battery bank test
+

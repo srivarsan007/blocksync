@@ -1,0 +1,188 @@
+{
+  "solver_status": "OPTIMAL",
+  "tasks_total": 9,
+  "tasks_scheduled": 9,
+  "baseline_metrics": {
+    "total_tasks_scheduled": 9,
+    "total_blocks_used": 9,
+    "total_downtime_minutes": 345,
+    "bundled_task_pairs": 0,
+    "conflicts_resolved": 5,
+    "criticality_weighted_ontime": 26,
+    "overdue_tasks_remaining": 1,
+    "schedule_utilization": 0.479
+  },
+  "optimized_metrics": {
+    "total_tasks_scheduled": 9,
+    "total_blocks_used": 5,
+    "total_downtime_minutes": 225,
+    "bundled_task_pairs": 4,
+    "conflicts_resolved": 5,
+    "criticality_weighted_ontime": 26,
+    "overdue_tasks_remaining": 1,
+    "schedule_utilization": 0.312
+  },
+  "bundled_pairs": [
+    [
+      "E1",
+      "S1"
+    ],
+    [
+      "S1",
+      "E2"
+    ],
+    [
+      "S2",
+      "E3"
+    ],
+    [
+      "E4",
+      "S3"
+    ]
+  ],
+  "schedule": [
+    {
+      "task_id": "E1",
+      "assigned_window_id": "W-A-morning",
+      "start_minute": 360,
+      "end_minute": 405,
+      "bundle_group_id": "BUNDLE-A-360"
+    },
+    {
+      "task_id": "S1",
+      "assigned_window_id": "W-A-morning",
+      "start_minute": 360,
+      "end_minute": 390,
+      "bundle_group_id": "BUNDLE-A-360"
+    },
+    {
+      "task_id": "T1",
+      "assigned_window_id": "W-A-morning",
+      "start_minute": 420,
+      "end_minute": 460,
+      "bundle_group_id": null
+    },
+    {
+      "task_id": "E2",
+      "assigned_window_id": "W-A-morning",
+      "start_minute": 360,
+      "end_minute": 420,
+      "bundle_group_id": "BUNDLE-A-360"
+    },
+    {
+      "task_id": "S2",
+      "assigned_window_id": "W-B-morning",
+      "start_minute": 480,
+      "end_minute": 505,
+      "bundle_group_id": "BUNDLE-B-480"
+    },
+    {
+      "task_id": "E3",
+      "assigned_window_id": "W-B-morning",
+      "start_minute": 480,
+      "end_minute": 530,
+      "bundle_group_id": "BUNDLE-B-480"
+    },
+    {
+      "task_id": "T2",
+      "assigned_window_id": "W-B-morning",
+      "start_minute": 530,
+      "end_minute": 565,
+      "bundle_group_id": null
+    },
+    {
+      "task_id": "E4",
+      "assigned_window_id": "W-C-morning",
+      "start_minute": 600,
+      "end_minute": 640,
+      "bundle_group_id": "BUNDLE-C-600"
+    },
+    {
+      "task_id": "S3",
+      "assigned_window_id": "W-C-morning",
+      "start_minute": 600,
+      "end_minute": 620,
+      "bundle_group_id": "BUNDLE-C-600"
+    }
+  ],
+  "explanations": [
+    {
+      "schedule_entry_id": "E1",
+      "reason_text": "Scheduled in Window W-A-morning (360-405m) and bundled with S1 on Section A due to compatible Engineering operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": "T1",
+      "synergy_captured": [
+        "S1"
+      ]
+    },
+    {
+      "schedule_entry_id": "S1",
+      "reason_text": "Scheduled in Window W-A-morning (360-390m) and bundled with E1, E2 on Section A due to compatible S&T operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": "T1",
+      "synergy_captured": [
+        "E1",
+        "E2"
+      ]
+    },
+    {
+      "schedule_entry_id": "T1",
+      "reason_text": "Scheduled in Window W-A-morning (420-460m) separately from conflicting task(s) [E1, S1, E2] on Section A due to power isolation requirements.",
+      "constraint_involved": "power_isolation_conflict",
+      "conflict_avoided": "E1",
+      "synergy_captured": null
+    },
+    {
+      "schedule_entry_id": "E2",
+      "reason_text": "Scheduled in Window W-A-morning (360-420m) and bundled with S1 on Section A due to compatible Engineering operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": "T1",
+      "synergy_captured": [
+        "S1"
+      ]
+    },
+    {
+      "schedule_entry_id": "S2",
+      "reason_text": "Scheduled in Window W-B-morning (480-505m) and bundled with E3 on Section B due to compatible S&T operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": "T2",
+      "synergy_captured": [
+        "E3"
+      ]
+    },
+    {
+      "schedule_entry_id": "E3",
+      "reason_text": "Scheduled in Window W-B-morning (480-530m) and bundled with S2 on Section B due to compatible Engineering operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": "T2",
+      "synergy_captured": [
+        "S2"
+      ]
+    },
+    {
+      "schedule_entry_id": "T2",
+      "reason_text": "Scheduled in Window W-B-morning (530-565m) separately from conflicting task(s) [S2, E3] on Section B due to power isolation requirements.",
+      "constraint_involved": "power_isolation_conflict",
+      "conflict_avoided": "S2",
+      "synergy_captured": null
+    },
+    {
+      "schedule_entry_id": "E4",
+      "reason_text": "Scheduled in Window W-C-morning (600-640m) and bundled with S3 on Section C due to compatible Engineering operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": null,
+      "synergy_captured": [
+        "S3"
+      ]
+    },
+    {
+      "schedule_entry_id": "S3",
+      "reason_text": "Scheduled in Window W-C-morning (600-620m) and bundled with E4 on Section C due to compatible S&T operations.",
+      "constraint_involved": "synergy_bundling",
+      "conflict_avoided": null,
+      "synergy_captured": [
+        "E4"
+      ]
+    }
+  ]
+}

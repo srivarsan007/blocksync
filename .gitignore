@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+frontend/.env.local
+
+# Logs
+*.log
+
+# Test coverage & cache
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Git bundles
+*.bundle
+
+# Data files (keep sample_dataset.csv, maintenance_windows.csv, and indian_railways_timetable_official.csv)
+data/*.csv
+!data/sample_dataset.csv
+!data/maintenance_windows.csv
+!data/indian_railways_timetable_official.csv
