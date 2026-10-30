@@ -75,8 +75,11 @@ BlockSync includes seeded accounts for local evaluation across coordinator and d
 To enable seeded evaluation accounts for local testing, set `BLOCKSYNC_DEMO_MODE=true` and provide a `PYJWT_SECRET` in your local environment or `.env` file:
 ```bash
 export BLOCKSYNC_DEMO_MODE=true
-export PYJWT_SECRET=local-dev-evaluation-secret
+export PYJWT_SECRET=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
 ```
+
+> [!NOTE]
+> In demo mode without an explicit `PYJWT_SECRET`, each server process creates its own random secret on the fly, so run a single worker (default with Uvicorn). Setting `PYJWT_SECRET` explicitly ensures consistent token signing across multi-worker deployments.
 
 | Role | Username | Password | Access Level |
 |---|---|---|---|
