@@ -27,7 +27,7 @@ Requests compete for the same limited resource: a **maintenance block** (a tempo
 
 **The gap, precisely:** Indian Railways' own systems (see Section 4 for detail) track and record these requests — but nothing computes the *jointly optimal* cross-department schedule. That reconciliation is manual today. BlockSync fills exactly that gap — no more, no less.
 
-**Never claim:** that Indian Railways has no digital systems, that BDMS does nothing, that we invented scheduling optimization, or that AI autonomously controls real railway blocks. All false and all easily disproven by a judge who checks.
+**Never claim:** that Indian Railways has no digital systems, that BDMS does nothing, that we invented scheduling optimization, or that AI autonomously controls real railway blocks. All false and easily disproven by anyone who inspects standard railway operating manuals.
 
 ---
 
